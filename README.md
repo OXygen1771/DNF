@@ -1,8 +1,11 @@
-# DoomedDOOM
+# DNF (Doomed and Forgotten)
+
+*(I'm working on the title...)*
 
 This is my attempt at creating something similar to DOOM on my own
 (using several tutorials).
 
+[читать на русском](/README.ru.md)
 
 ### Table of contents
 - [Introduction](#introduction)
