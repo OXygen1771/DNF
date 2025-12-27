@@ -18,8 +18,9 @@ This is my attempt at creating something similar to DOOM on my own
 I wanted to recreate the legendary DOOM using C (standard C23) and raylib.  
 All the graphics are rendered on the CPU because I also wanted to try that.
 
-The code was written in the CLion IDE (JetBrains). Builds are done using CMake
-on WSL2. The [`.idea/`](.idea) directory contains IDE settings.
+The code was written in the CLion IDE (JetBrains), settings are stored in the
+[`.idea/`](.idea) directory.
+Builds for Linux (untested) are done using `gcc`, Windows builds use `MSVC`.
 
 
 ## Building from source

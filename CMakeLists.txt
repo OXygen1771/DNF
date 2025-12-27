@@ -1,3 +1,20 @@
+# DNF (Doomed and Forgotten): a DOOM-style first-person shooter.
+# Copyright (C) 2025  Alexandr Gorbatenko
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 cmake_minimum_required(VERSION 4.0)
 
 project(
@@ -47,19 +64,23 @@ add_dependency_from_git(
 
 
 ############################################
+###        PROJECT SUBDIRECTORIES        ###
+############################################
+
+add_subdirectory(core)
+add_subdirectory(gameplay)
+
+
+############################################
 ###          PROJECT EXECUTABLE          ###
 ############################################
 
-add_executable(${PROJECT_NAME})
-
-target_sources(${PROJECT_NAME}
-        PRIVATE
-            hello.c
-)
+add_executable(${PROJECT_NAME} main.c)
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
-            raylib
+            core
+            gameplay
 )
 
 
@@ -67,4 +88,9 @@ target_link_libraries(${PROJECT_NAME}
 ###            BUILD SETTINGS            ###
 ############################################
 
-set(CMAKE_C_FLAGS "-Wall -Wextra")
+
+if (MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+else ()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+endif ()
