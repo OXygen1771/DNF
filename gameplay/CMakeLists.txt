@@ -28,6 +28,7 @@ target_sources(gameplay
             FILE_SET HEADERS
             FILES
                 include/gameplay.h
+                include/gameplay_api.h
 )
 
 target_include_directories(gameplay
@@ -35,6 +36,10 @@ target_include_directories(gameplay
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<INSTALL_INTERFACE:include>
 )
+
+if (MSVC)
+    target_compile_definitions(gameplay PRIVATE DNF_GAMEPLAY_EXPORTS)
+endif ()
 
 target_link_libraries(gameplay
         PRIVATE

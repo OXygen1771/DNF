@@ -37,7 +37,7 @@ void core_engine_init(const char *title, const int width, const int height)
 
 void core_engine_loop(void (*update)(float dt))
 {
-    if (g_running && !WindowShouldClose())
+    while (g_running && !WindowShouldClose())
     {
         float dt = GetFrameTime();
 

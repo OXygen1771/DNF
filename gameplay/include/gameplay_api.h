@@ -15,16 +15,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#ifndef DNF_GAMEPLAY_H
-#define DNF_GAMEPLAY_H
+#ifndef DNF_GAMEPLAY_API_H
+#define DNF_GAMEPLAY_API_H
 
-#include "gameplay_api.h"
+#ifdef _WIN32  // link shared gameplay library on MSVC
+    #ifdef DNF_GAMEPLAY_EXPORTS
+        #define DNF_GAMEPLAY_API __declspec(dllexport)
+    #else
+        #define DNF_GAMEPLAY_API __declspec(dllimport)
+    #endif
+#else // Linux etc.
+    #define DNF_GAMEPLAY_API
+#endif
 
-/**
- * @brief Updates the game state.
- *
- * @param dt Time since last update (frame).
- */
-DNF_GAMEPLAY_API void gameplay_update(float dt);
-
-#endif //DNF_GAMEPLAY_H
+#endif //DNF_GAMEPLAY_API_H

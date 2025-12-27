@@ -39,6 +39,6 @@ target_include_directories(core
 )
 
 target_link_libraries(core
-        PUBLIC
+        PRIVATE
             raylib  # from root CMakeLists.txt
 )
