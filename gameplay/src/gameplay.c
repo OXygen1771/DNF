@@ -20,8 +20,4 @@
 
 void gameplay_update(float dt)
 {
-    while (dt)
-    {
-
-    }
 }

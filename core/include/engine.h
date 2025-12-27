@@ -32,9 +32,9 @@ void core_engine_init(const char *title, int width, int height);
 /**
  * @brief Runs the core engine loop.
  *
- * @param update Game update function to apply.
+ * @param update_callback Game update callback
  */
-void core_engine_loop(void (*update)(float dt));
+void core_engine_loop(void (*update_callback)(float dt));
 
 /**
  * @brief Stops the engine loop.

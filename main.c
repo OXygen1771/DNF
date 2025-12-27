@@ -23,4 +23,5 @@ int main(void)
 {
     core_engine_init("DNF 0.1.0", 960, 540);
     core_engine_loop(gameplay_update);
+    core_engine_stop();
 }

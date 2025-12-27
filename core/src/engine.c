@@ -20,31 +20,27 @@
 #include "raylib.h"
 
 
-/**
- * @brief Global running indicator
- */
-static bool g_running = false;
-
 void core_engine_init(const char *title, const int width, const int height)
 {
     InitWindow(width, height, title);
     SetTargetFPS(60);  // TODO: add FPS setting?
 
     core_renderer_init();
-
-    g_running = true;
 }
 
-void core_engine_loop(void (*update)(float dt))
+void core_engine_loop(void (*update_callback)(float dt))
 {
-    while (g_running && !WindowShouldClose())
+    while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
 
-        update(dt);
-
-        BeginDrawing();
-        core_renderer_clear(BLACK);
-        EndDrawing();
+        update_callback(dt);
+        core_renderer_render();
     }
+}
+
+void core_engine_stop(void)
+{
+    core_renderer_stop();
+    CloseWindow();
 }

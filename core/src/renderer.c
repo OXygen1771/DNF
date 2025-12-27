@@ -29,3 +29,13 @@ void core_renderer_clear(const Color color)
 {
     ClearBackground(color);
 }
+
+void core_renderer_render(void)
+{
+    BeginDrawing();
+
+        core_renderer_clear(BLACK);
+        DrawCircle(10, 10, 10, RED);
+
+    EndDrawing();
+}

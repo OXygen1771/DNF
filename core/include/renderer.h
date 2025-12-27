@@ -31,10 +31,8 @@ void core_renderer_init(void);
 void core_renderer_stop(void);
 
 /**
- * @brief Clears the frame buffer with the given color.
- *
- * @param color Fill color
+ * @brief Draws the game scene.
  */
-void core_renderer_clear(Color color);
+void core_renderer_render(void);
 
 #endif //DNF_RENDERER_H
