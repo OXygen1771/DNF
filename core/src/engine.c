@@ -17,8 +17,13 @@
 
 #include "engine.h"
 #include "renderer.h"
+#include "input_system.h"
+
 #include "raylib.h"
 
+
+//!< Global input system handler (initialized in the engine's init function)
+static DNF_InputSystemHandler g_InputSystemHandler;
 
 void core_engine_init(const char *title, const int width, const int height)
 {
@@ -26,15 +31,17 @@ void core_engine_init(const char *title, const int width, const int height)
     SetTargetFPS(60);  // TODO: add FPS setting?
 
     core_renderer_init();
+    core_input_system_init(&g_InputSystemHandler);
 }
 
-void core_engine_loop(void (*update_callback)(float dt))
+void core_engine_loop(void (*update_callback)(float dt, const DNF_InputSystemHandler *))
 {
     while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
 
-        update_callback(dt);
+        core_input_update(&g_InputSystemHandler);
+        update_callback(dt, &g_InputSystemHandler);
         core_renderer_render();
     }
 }

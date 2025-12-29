@@ -14,22 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(core
-        STATIC
-            src/engine.c
-            src/renderer.c
-)
+add_library(core STATIC)
 
 target_sources(core
         PRIVATE
             src/engine.c
             src/renderer.c
+            src/input_system.c
 
         PUBLIC
             FILE_SET HEADERS
             FILES
                 include/engine.h
                 include/renderer.h
+                include/input_system.h
 )
 
 target_include_directories(core

@@ -17,7 +17,19 @@
 
 #include "gameplay.h"
 
+#include "input_system.h"
 
-void gameplay_update(float dt)
+#include <stdio.h>
+
+
+void gameplay_update(float dt, const DNF_InputSystemHandler *input_handler)
 {
+    if (core_input_action_is_pressed(input_handler, DNF_GAME_ACTION_ATTACK1))
+        printf("MOUSE1 PRESSED\n");
+
+    if (core_input_action_is_held(input_handler, DNF_GAME_ACTION_ATTACK1))
+        printf("MOUSE1 HELD\n");
+
+    if (core_input_action_is_released(input_handler, DNF_GAME_ACTION_ATTACK1))
+        printf("MOUSE1 RELEASED\n");
 }

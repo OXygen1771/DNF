@@ -19,12 +19,14 @@
 #define DNF_GAMEPLAY_H
 
 #include "gameplay_api.h"
+#include "input_system.h"
 
 /**
  * @brief Updates the game state.
  *
  * @param dt Time since last update (frame).
+ * @param input_handler Pointer to the input system handler.
  */
-DNF_GAMEPLAY_API void gameplay_update(float dt);
+DNF_GAMEPLAY_API void gameplay_update(float dt, const DNF_InputSystemHandler *input_handler);
 
 #endif //DNF_GAMEPLAY_H
