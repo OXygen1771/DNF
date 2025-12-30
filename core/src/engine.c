@@ -17,19 +17,27 @@
 
 #include "engine.h"
 #include "renderer.h"
+#include "log.h"
+
 #include "raylib.h"
 
 
 void core_engine_init(const char *title, const int width, const int height)
 {
+    dnf_log_system_init();
+    dnf_info("Starting the DNF engine");
+
+    dnf_info("Initializing window %s (%dx%d)", title, width, height);
     InitWindow(width, height, title);
     SetTargetFPS(60);  // TODO: add FPS setting?
 
+    dnf_info("Initializing the rendering engine");
     core_renderer_init();
 }
 
 void core_engine_loop(void (*update_callback)(float dt))
 {
+    dnf_info("Starting the DNF engine loop");
     while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
@@ -37,10 +45,13 @@ void core_engine_loop(void (*update_callback)(float dt))
         update_callback(dt);
         core_renderer_render();
     }
+    dnf_info("DNF engine loop exited!");
 }
 
 void core_engine_stop(void)
 {
+    dnf_info("Stopping the DNF game engine");
+    dnf_info("Stopping the rendering engine");
     core_renderer_stop();
     CloseWindow();
 }
