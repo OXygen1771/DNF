@@ -15,10 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-add_library(gameplay
-        SHARED
-            src/gameplay.c
-)
+add_library(gameplay SHARED)
 
 target_sources(gameplay
         PRIVATE
