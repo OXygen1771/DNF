@@ -17,8 +17,6 @@
 
 #include "input_system.h"
 
-#include "raylib.h"
-
 
 void core_input_system_init(DNF_InputSystemHandler* handler)
 {
@@ -35,6 +33,10 @@ void core_input_system_init(DNF_InputSystemHandler* handler)
 
     for (int i = 0; i < DNF_GAME_ACTION_COUNT; i++)
         handler->action_states[i] = DNF_INPUT_STATE_IDLE;
+
+    handler->mouse_pos = GetMousePosition();
+    handler->mouse_pos_delta = (Vector2){0.0f, 0.0f};
+    handler->mouse_wheel_delta = (Vector2){0.0f, 0.0f};
 }
 
 void core_input_update(DNF_InputSystemHandler *handler)
@@ -70,6 +72,11 @@ void core_input_update(DNF_InputSystemHandler *handler)
                 handler->action_states[i] = DNF_INPUT_STATE_IDLE;
         }
     }
+
+    // update mouse pointer info
+    handler->mouse_pos = GetMousePosition();
+    handler->mouse_pos_delta = GetMouseDelta();
+    handler->mouse_wheel_delta = GetMouseWheelMoveV();
 }
 
 DNF_InputState core_input_get_current_state(const DNF_InputSystemHandler *handler, const DNF_GameAction action)

@@ -20,6 +20,8 @@
 
 #include <stdbool.h>
 
+#include "raylib.h"
+
 /**
  * @brief An enum that represents the player's current action.
  *
@@ -84,6 +86,11 @@ typedef struct DNF_InputSystemHandler
     int keybind_LUT[DNF_GAME_ACTION_COUNT];
     /* An array containing input states of all game actions. */
     DNF_InputState action_states[DNF_GAME_ACTION_COUNT];
+
+    Vector2 mouse_pos;
+    Vector2 mouse_pos_delta;
+    Vector2 mouse_wheel_delta;
+
 } DNF_InputSystemHandler;
 
 /**
