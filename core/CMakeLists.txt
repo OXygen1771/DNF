@@ -20,12 +20,14 @@ target_sources(core
         PRIVATE
             src/engine.c
             src/renderer.c
+            src/log.c
 
         PUBLIC
             FILE_SET HEADERS
             FILES
                 include/engine.h
                 include/renderer.h
+                include/log.h
 )
 
 target_include_directories(core
