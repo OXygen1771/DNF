@@ -17,6 +17,7 @@
 
 #ifndef DNF_ENGINE_H
 #define DNF_ENGINE_H
+#include "input_system.h"
 
 /**
  * @brief Initializes the game engine.
@@ -34,7 +35,7 @@ void core_engine_init(const char *title, int width, int height);
  *
  * @param update_callback Game update callback
  */
-void core_engine_loop(void (*update_callback)(float dt));
+void core_engine_loop(void (*update_callback)(float dt, const DNF_InputSystemHandler *));
 
 /**
  * @brief Stops the engine loop.

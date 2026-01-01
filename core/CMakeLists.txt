@@ -20,6 +20,7 @@ target_sources(core
         PRIVATE
             src/engine.c
             src/renderer.c
+            src/input_system.c
             src/log.c
 
         PUBLIC
@@ -27,6 +28,7 @@ target_sources(core
             FILES
                 include/engine.h
                 include/renderer.h
+                include/input_system.h
                 include/log.h
 )
 
