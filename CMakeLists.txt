@@ -1,5 +1,5 @@
 # DNF (Doomed and Forgotten): a DOOM-style first-person shooter.
-# Copyright (C) 2025  Alexandr Gorbatenko
+# Copyright (C) 2025-2026  Alexandr Gorbatenko
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
