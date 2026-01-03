@@ -33,6 +33,7 @@ void core_engine_init(const char *title, const int width, const int height, void
 
     dnf_info("Initializing window %s (%dx%d)", title, width, height);
     InitWindow(width, height, title);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetTargetFPS(60);  // TODO: add FPS setting?
 
     dnf_info("Initializing the rendering engine");

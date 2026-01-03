@@ -22,13 +22,26 @@
 
 /**
  * @brief Initializes the rendering engine.
+ *
+ * Creates a Texture2D that will be used to render stuff to.
  */
 void core_renderer_init(void);
 
 /**
  * @brief Stops the rendering engine.
+ *
+ * Unloads the render texture from the GPU.
  */
 void core_renderer_stop(void);
+
+/**
+ * @brief Draws a pixel at given coordinates with a given color.
+ *
+ * @param x X coord (left to right)
+ * @param y Y coord (top to bottom)
+ * @param color raylib Color
+ */
+void core_renderer_draw_pixel(int x, int y, Color color);
 
 /**
  * @brief Draws the game scene.

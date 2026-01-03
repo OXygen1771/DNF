@@ -18,24 +18,74 @@
 #include "renderer.h"
 #include "raylib.h"
 
+#define WIDTH 960    //!< Render texture width.
+#define HEIGHT 540   //!< Render texture height.
+
+// Global pixel array.
+static Color pixels[WIDTH * HEIGHT];
+// Main texture that we will draw to directly.
+static Texture2D fb_texture;
 
 void core_renderer_init(void)
-{ /* already handled by Raylib when creating a window in the engine init */ }
+{
+    const Image fb_image = {
+        .data = pixels,
+        .width = WIDTH,
+        .height = HEIGHT,
+        .mipmaps = 1,
+        .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
+    };
+    fb_texture = LoadTextureFromImage(fb_image);
+    SetTextureFilter(fb_texture, TEXTURE_FILTER_POINT);  // disable interpolation
+}
 
 void core_renderer_stop(void)
-{  }
-
-void core_renderer_clear(const Color color)
 {
-    ClearBackground(color);
+    UnloadTexture(fb_texture);
+}
+
+void core_renderer_draw_pixel(const int x, const int y, const Color color)
+{
+    pixels[y * WIDTH + x] = color;
+}
+
+void draw_test()
+{
+    for (int y = 0; y < HEIGHT; y++)
+        for (int x = 0; x < WIDTH; x++)
+            core_renderer_draw_pixel(x, y, (Color){
+                .r = x & 0xff,
+                .g = y & 0xff,
+                .b = (x + y) & 0xff,
+                .a = 0xff
+            });
 }
 
 void core_renderer_render(void)
 {
+    const float screen_width = (float)GetScreenWidth();
+    const float screen_height = (float)GetScreenHeight();
+
+    // get the smaller of ratios
+    const float scale = (screen_width / (float)WIDTH) < (screen_height / (float)HEIGHT) ? (screen_width / (float)WIDTH) : (screen_height / (float)HEIGHT);
+
+    const Vector2 position = {
+        (screen_width - WIDTH * scale) / 2,
+        (screen_height - HEIGHT * scale) / 2,
+    };
+
+    draw_test();
+
+    UpdateTexture(fb_texture, pixels);
     BeginDrawing();
-
-        core_renderer_clear(BLACK);
-        DrawCircle(10, 10, 10, RED);
-
+        ClearBackground(BLACK);
+        DrawTextureEx(
+            fb_texture,
+            position,
+            0.0f,
+            scale,
+            WHITE
+            );
+        DrawFPS(10, 10);
     EndDrawing();
 }
