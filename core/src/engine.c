@@ -26,7 +26,7 @@
 //!< Global input system handler (initialized in the engine's init function)
 static DNF_InputSystemHandler g_InputSystemHandler;
 
-void core_engine_init(const char *title, const int width, const int height)
+void core_engine_init(const char *title, const int width, const int height, void (*init_callback)(const DNF_InputSystemHandler *))
 {
     dnf_log_system_init();
     dnf_info("Starting the DNF engine");
@@ -39,9 +39,12 @@ void core_engine_init(const char *title, const int width, const int height)
     core_renderer_init();
     dnf_info("Initializing the input system");
     core_input_system_init(&g_InputSystemHandler);
+
+    dnf_info("Initializing the gameplay module");
+    init_callback(&g_InputSystemHandler);
 }
 
-void core_engine_loop(void (*update_callback)(float dt, const DNF_InputSystemHandler *))
+void core_engine_loop(void (*update_callback)(float dt))
 {
     dnf_info("Starting the DNF engine loop");
     while (!WindowShouldClose())
@@ -49,7 +52,7 @@ void core_engine_loop(void (*update_callback)(float dt, const DNF_InputSystemHan
         float dt = GetFrameTime();
 
         core_input_update(&g_InputSystemHandler);
-        update_callback(dt, &g_InputSystemHandler);
+        update_callback(dt);
         core_renderer_render();
     }
     dnf_info("DNF engine loop exited!");

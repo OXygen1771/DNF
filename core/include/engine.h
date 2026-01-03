@@ -27,15 +27,16 @@
  * @param  title   Game window title
  * @param  width   Game window width
  * @param height   Game window height
+ * @param init_callback Game init callback
  */
-void core_engine_init(const char *title, int width, int height);
+void core_engine_init(const char *title, int width, int height, void (*init_callback)(const DNF_InputSystemHandler *));
 
 /**
  * @brief Runs the core engine loop.
  *
  * @param update_callback Game update callback
  */
-void core_engine_loop(void (*update_callback)(float dt, const DNF_InputSystemHandler *));
+void core_engine_loop(void (*update_callback)(float dt));
 
 /**
  * @brief Stops the engine loop.

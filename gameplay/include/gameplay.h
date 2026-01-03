@@ -22,11 +22,19 @@
 #include "input_system.h"
 
 /**
+ * @brief Initializes the game.
+ *
+ * Creates a player, creates a basic test map.
+ *
+ * @param input_system_handler Pointer to the input system handler.
+ */
+DNF_GAMEPLAY_API void gameplay_init(const DNF_InputSystemHandler *input_system_handler);
+
+/**
  * @brief Updates the game state.
  *
  * @param dt Time since last update (frame).
- * @param input_handler Pointer to the input system handler.
  */
-DNF_GAMEPLAY_API void gameplay_update(float dt, const DNF_InputSystemHandler *input_handler);
+DNF_GAMEPLAY_API void gameplay_update(float dt);
 
 #endif //DNF_GAMEPLAY_H
