@@ -67,15 +67,16 @@ add_dependency_from_git(
 ###        PROJECT SUBDIRECTORIES        ###
 ############################################
 
+# dynamic libraries (core && gameplay stuff)
 add_subdirectory(core)
 add_subdirectory(gameplay)
 
+# game executable
+add_subdirectory(launcher)
 
 ############################################
 ###          PROJECT EXECUTABLE          ###
 ############################################
-
-add_executable(${PROJECT_NAME} main.c)
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
