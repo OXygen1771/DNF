@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#pragma once
 
-#ifndef DNF_ENGINE_H
-#define DNF_ENGINE_H
+#include "defines.h"
 #include "input_system.h"
 
 /**
@@ -29,18 +29,16 @@
  * @param height   Game window height
  * @param init_callback Game init callback
  */
-void core_engine_init(const char *title, int width, int height, void (*init_callback)(const DNF_InputSystemHandler *));
+void core_engine_init(const char *title, int32_t width, int32_t height, void (*init_callback)(const DNF_InputSystemHandler *));
 
 /**
  * @brief Runs the core engine loop.
  *
  * @param update_callback Game update callback
  */
-void core_engine_loop(void (*update_callback)(float dt));
+void core_engine_loop(void (*update_callback)(float32_t dt));
 
 /**
  * @brief Stops the engine loop.
  */
 void core_engine_stop(void);
-
-#endif //DNF_ENGINE_H

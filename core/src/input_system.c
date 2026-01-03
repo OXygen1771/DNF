@@ -31,7 +31,7 @@ void core_input_system_init(DNF_InputSystemHandler* handler)
     handler->keybind_LUT[DNF_GAME_ACTION_ATTACK1] = MOUSE_BUTTON_LEFT;
     handler->keybind_LUT[DNF_GAME_ACTION_ATTACK2] = MOUSE_BUTTON_RIGHT;
 
-    for (int i = 0; i < DNF_GAME_ACTION_COUNT; i++)
+    for (uint32_t i = 0; i < DNF_GAME_ACTION_COUNT; i++)
         handler->action_states[i] = DNF_INPUT_STATE_IDLE;
 
     handler->mouse_pos = GetMousePosition();

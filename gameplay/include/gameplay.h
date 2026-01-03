@@ -14,11 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#pragma once
 
-#ifndef DNF_GAMEPLAY_H
-#define DNF_GAMEPLAY_H
-
-#include "gameplay_api.h"
+#include "defines.h"
 #include "input_system.h"
 
 /**
@@ -28,13 +26,11 @@
  *
  * @param input_system_handler Pointer to the input system handler.
  */
-DNF_GAMEPLAY_API void gameplay_init(const DNF_InputSystemHandler *input_system_handler);
+DNF_API void gameplay_init(const DNF_InputSystemHandler *input_system_handler);
 
 /**
  * @brief Updates the game state.
  *
  * @param dt Time since last update (frame).
  */
-DNF_GAMEPLAY_API void gameplay_update(float dt);
-
-#endif //DNF_GAMEPLAY_H
+DNF_API void gameplay_update(float32_t dt);

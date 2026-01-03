@@ -16,6 +16,7 @@
 
 add_library(core STATIC)
 
+# add all sources
 target_sources(core
         PRIVATE
             src/engine.c
@@ -26,12 +27,14 @@ target_sources(core
         PUBLIC
             FILE_SET HEADERS
             FILES
+                include/defines.h
                 include/engine.h
                 include/renderer.h
                 include/input_system.h
                 include/log.h
 )
 
+# specify includes for the core module
 target_include_directories(core
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -15,10 +15,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#ifndef DNF_RENDERER_H
-#define DNF_RENDERER_H
+#pragma once
 
-#include "raylib.h"
+#include "defines.h"
+
+#include <raylib.h>
+
+#define WIDTH 960    //!< Render texture width.
+#define WIDTH2 480   //!< Half of render texture width.
+#define HEIGHT 540   //!< Render texture height.
+#define HEIGHT2 270  //!< Half of render texture height.
+
 
 /**
  * @brief Initializes the rendering engine.
@@ -41,11 +48,9 @@ void core_renderer_stop(void);
  * @param y Y coord (top to bottom)
  * @param color raylib Color
  */
-void core_renderer_draw_pixel(int x, int y, Color color);
+void core_renderer_draw_pixel(uint32_t x, uint32_t y, Color color);
 
 /**
  * @brief Draws the game scene.
  */
 void core_renderer_render(void);
-
-#endif //DNF_RENDERER_H

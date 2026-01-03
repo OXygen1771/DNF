@@ -14,13 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#pragma once
 
-#ifndef DNF_INPUT_SYSTEM_H
-#define DNF_INPUT_SYSTEM_H
+#include "defines.h"
 
-#include <stdbool.h>
-
-#include "raylib.h"
+#include <raylib.h>
 
 /**
  * @brief An enum that represents the player's current action.
@@ -83,7 +81,7 @@ typedef enum DNF_InputState
 typedef struct DNF_InputSystemHandler
 {
     /* A map between raylib keycodes and game actions. */
-    int keybind_LUT[DNF_GAME_ACTION_COUNT];
+    int32_t keybind_LUT[DNF_GAME_ACTION_COUNT];
     /* An array containing input states of all game actions. */
     DNF_InputState action_states[DNF_GAME_ACTION_COUNT];
 
@@ -148,5 +146,3 @@ bool core_input_action_is_held(const DNF_InputSystemHandler *handler, DNF_GameAc
  * @return true if the key was released during the current update
  */
 bool core_input_action_is_released(const DNF_InputSystemHandler *handler, DNF_GameAction action);
-
-#endif //DNF_INPUT_SYSTEM_H

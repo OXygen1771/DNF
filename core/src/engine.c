@@ -20,13 +20,11 @@
 #include "input_system.h"
 #include "log.h"
 
-#include "raylib.h"
 
-
-//!< Global input system handler (initialized in the engine's init function)
+// Global input system handler (initialized in the engine's init function)
 static DNF_InputSystemHandler g_InputSystemHandler;
 
-void core_engine_init(const char *title, const int width, const int height, void (*init_callback)(const DNF_InputSystemHandler *))
+void core_engine_init(const char *title, const int32_t width, const int32_t height, void (*init_callback)(const DNF_InputSystemHandler *))
 {
     dnf_log_system_init();
     dnf_info("Starting the DNF engine");
@@ -45,12 +43,12 @@ void core_engine_init(const char *title, const int width, const int height, void
     init_callback(&g_InputSystemHandler);
 }
 
-void core_engine_loop(void (*update_callback)(float dt))
+void core_engine_loop(void (*update_callback)(float32_t dt))
 {
     dnf_info("Starting the DNF engine loop");
     while (!WindowShouldClose())
     {
-        float dt = GetFrameTime();
+        float32_t dt = GetFrameTime();
 
         core_input_update(&g_InputSystemHandler);
         update_callback(dt);

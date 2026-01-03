@@ -81,7 +81,7 @@ static void dnf_log_open_file(const char *filename)
         filename,
         GENERIC_WRITE,
         FILE_SHARE_READ,
-        NULL,
+        nullptr,
         CREATE_ALWAYS,
         FILE_ATTRIBUTE_NORMAL,
         NULL);
@@ -181,8 +181,8 @@ void dnf_log_system_init(void)
 // -- Main function
 void dnf_log_message(
     const char *file,
-    int line,
-    DNF_LogLevel level,
+    const uint32_t line,
+    const DNF_LogLevel level,
     const char *message,
     ...)
 {
@@ -199,7 +199,7 @@ void dnf_log_message(
 
     // formatting user's message
     char formatted_message[DNF_LOG_MAX_MESSAGE_LENGTH];
-    va_list args;
+    va_list args = nullptr;
     va_start(args, message);
     vsnprintf_s(  // C4996: use this instead of vsnprintf()
         formatted_message,

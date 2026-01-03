@@ -15,8 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-#ifndef DNF_LOG_H
-#define DNF_LOG_H
+#pragma once
+
+#include "defines.h"
 
 /**
  * @brief An enum that represents the current program logging level.
@@ -50,7 +51,7 @@ void dnf_log_system_init(void);
  * @param message Message of the log, a printf format string.
  * @param ... Additional arguments for the message format string.
  */
-void dnf_log_message(const char *file, int line, DNF_LogLevel level, const char *message, ...);
+void dnf_log_message(const char *file, uint32_t line, DNF_LogLevel level, const char *message, ...);
 
 
 // debug breaking for Windows
@@ -81,6 +82,3 @@ void dnf_log_message(const char *file, int line, DNF_LogLevel level, const char 
 #define dnf_error(fmt, ...) dnf_log_message(__FILE__, __LINE__, DNF_LOG_ERROR, fmt, ##__VA_ARGS__)
 #define dnf_error(fmt, ...) dnf_log_message(__FILE__, __LINE__, DNF_LOG_FATAL, fmt, ##__VA_ARGS__)
 #endif
-
-
-#endif //DNF_LOG_H

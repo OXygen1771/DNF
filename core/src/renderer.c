@@ -18,9 +18,6 @@
 #include "renderer.h"
 #include "raylib.h"
 
-#define WIDTH 960    //!< Render texture width.
-#define HEIGHT 540   //!< Render texture height.
-
 // Global pixel array.
 static Color pixels[WIDTH * HEIGHT];
 // Main texture that we will draw to directly.
@@ -44,21 +41,9 @@ void core_renderer_stop(void)
     UnloadTexture(fb_texture);
 }
 
-void core_renderer_draw_pixel(const int x, const int y, const Color color)
+void core_renderer_draw_pixel(uint32_t x, uint32_t y, const Color color)
 {
     pixels[y * WIDTH + x] = color;
-}
-
-void draw_test()
-{
-    for (int y = 0; y < HEIGHT; y++)
-        for (int x = 0; x < WIDTH; x++)
-            core_renderer_draw_pixel(x, y, (Color){
-                .r = x & 0xff,
-                .g = y & 0xff,
-                .b = (x + y) & 0xff,
-                .a = 0xff
-            });
 }
 
 void core_renderer_render(void)
@@ -74,7 +59,7 @@ void core_renderer_render(void)
         (screen_height - HEIGHT * scale) / 2,
     };
 
-    draw_test();
+    core_renderer_draw_pixel(50, 50, WHITE);
 
     UpdateTexture(fb_texture, pixels);
     BeginDrawing();
