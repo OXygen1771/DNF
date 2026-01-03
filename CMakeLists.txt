@@ -21,7 +21,7 @@ project(
         DNF
         LANGUAGES C
         VERSION 0.1.0
-        DESCRIPTION "A simple DOOM-like game in C"
+        DESCRIPTION "Doom-like game in C"
 )
 
 set(CMAKE_C_STANDARD 23)
@@ -82,15 +82,3 @@ target_link_libraries(${PROJECT_NAME}
             core
             gameplay
 )
-
-
-############################################
-###            BUILD SETTINGS            ###
-############################################
-
-
-if (MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
-else ()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
-endif ()

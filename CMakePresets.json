@@ -1,0 +1,112 @@
+{
+	"version": 10,
+	"cmakeMinimumRequired": {
+		"major": 4,
+		"minor": 0,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "config-base",
+			"hidden": true,
+			"displayName": "Basic config",
+			"description": "Default build using Ninja and clang",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/cmake-build-${presetName}",
+			"environment": {
+				"CC": "clang",
+				"CCX": "clang"
+			},
+			"cacheVariables": {
+				"CMAKE_C_COMPILER": "clang",
+				"CMAKE_CXX_COMPILER": "clang++",
+
+				"CMAKE_C_FLAGS": "-Wall -Wextra"
+			}
+		},
+		{
+			"name": "debug-windows",
+			"displayName": "Basic Debug configuration for Windows",
+			"description": "Sets build type to Debug and compiler to clang-cl (for Windows)",
+			"inherits": ["config-base"],
+			"environment": {
+				"CC": "clang-cl",
+				"CCX": "clang-cl"
+			},
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_C_COMPILER": "clang-cl",
+				"CMAKE_CXX_COMPILER": "clang-cl",
+
+				"CMAKE_C_FLAGS": "$env{CMAKE_C_FLAGS} -D_DEBUG -DDNFEXPORT"
+			}
+		},
+		{
+			"name": "debug-linux",
+			"displayName": "Basic Debug configuration for Linux",
+			"description": "Sets build type to Debug",
+			"inherits": ["config-base"],
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+
+				"CMAKE_C_FLAGS": "$env{CMAKE_C_FLAGS} -D_DEBUG -DDNFEXPORT"
+			}
+		},
+		{
+			"name": "release-windows",
+			"displayName": "Basic Release configuration for Windows",
+			"description": "Sets build type to Release",
+			"inherits": ["debug-windows"],
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "release-linux",
+			"displayName": "Basic Release configuration for Linux",
+			"description": "Sets build type to Release",
+			"inherits": ["debug-linux"],
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "build-base-windows",
+			"hidden": true,
+			"displayName": "Basic build preset for Windows",
+			"description": "By default uses the Debug preset for Windows",
+			"configurePreset": "debug-windows"
+		},
+		{
+			"name": "build-base-linux",
+			"hidden": true,
+			"displayName": "Basic build preset for Linux",
+			"description": "By default uses the Debug preset for Linux",
+			"configurePreset": "debug-linux"
+		},
+		{
+			"name": "build-debug-windows",
+			"displayName": "Build Debug for Windows",
+			"inherits": ["build-base-windows"]
+		},
+		{
+			"name": "build-debug-linux",
+			"displayName": "Build Debug for Linux",
+			"inherits": ["build-base-linux"]
+		},
+		{
+			"name": "build-release-windows",
+			"displayName": "Build Release for Windows",
+			"inherits": ["build-base-windows"],
+			"configurePreset": "release-windows"
+		},
+		{
+			"name": "build-release-linux",
+			"displayName": "Build Release for Linux",
+			"inherits": ["build-base-linux"],
+			"configurePreset": "release-linux"
+		}
+	]
+}
