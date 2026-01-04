@@ -16,6 +16,7 @@
 
 
 #include "logger.h"
+#include "dnf_assertions.h"
 
 #include <raylib.h>  // cross-platform file operations
 
@@ -117,4 +118,14 @@ void dnf_log_message(const char* file, const uint32_t line, const dnf_log_level 
         memcpy(log_buffer + log_buffer_pos, out_message, message_len);
         log_buffer_pos += message_len;
     }
+}
+
+void log_assertion_failure(const char *expression, const char *file, const uint32_t line, const char *message)
+{
+    dnf_log_message(
+        file,
+        line,
+        DNF_LOG_LEVEL_FATAL,
+        "Assertion failed: %s, message: %s",
+        expression, message);
 }

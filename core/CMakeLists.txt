@@ -32,6 +32,7 @@ target_sources(core
                 include/renderer.h
                 include/input_system.h
                 include/logger.h
+                include/dnf_assertions.h
 )
 
 # specify includes for the core module
