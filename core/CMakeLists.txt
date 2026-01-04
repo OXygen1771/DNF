@@ -22,7 +22,7 @@ target_sources(core
             src/engine.c
             src/renderer.c
             src/input_system.c
-            src/log.c
+            src/logger.c
 
         PUBLIC
             FILE_SET HEADERS
@@ -31,7 +31,7 @@ target_sources(core
                 include/engine.h
                 include/renderer.h
                 include/input_system.h
-                include/log.h
+                include/logger.h
 )
 
 # specify includes for the core module

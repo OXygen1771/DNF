@@ -18,7 +18,6 @@
 #include "gameplay.h"
 #include "input_system.h"
 #include "renderer.h"
-#include "log.h"
 
 #include <math.h>
 

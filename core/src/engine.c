@@ -18,7 +18,7 @@
 #include "engine.h"
 #include "renderer.h"
 #include "input_system.h"
-#include "log.h"
+#include "logger.h"
 
 
 // Global input system handler (initialized in the engine's init function)
@@ -26,26 +26,26 @@ static DNF_InputSystemHandler g_InputSystemHandler;
 
 void core_engine_init(const char *title, const int32_t width, const int32_t height, void (*init_callback)(const DNF_InputSystemHandler *))
 {
-    dnf_log_system_init();
-    dnf_info("Starting the DNF engine");
+    dnf_logger_init();
+    DNF_INFO("Starting the DNF engine");
 
-    dnf_info("Initializing window %s (%dx%d)", title, width, height);
+    DNF_INFO("Initializing window %s (%dx%d)", title, width, height);
     InitWindow(width, height, title);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     SetTargetFPS(60);  // TODO: add FPS setting?
 
-    dnf_info("Initializing the rendering engine");
+    DNF_INFO("Initializing the rendering engine");
     core_renderer_init();
-    dnf_info("Initializing the input system");
+    DNF_INFO("Initializing the input system");
     core_input_system_init(&g_InputSystemHandler);
 
-    dnf_info("Initializing the gameplay module");
+    DNF_INFO("Initializing the gameplay module");
     init_callback(&g_InputSystemHandler);
 }
 
 void core_engine_loop(void (*update_callback)(float32_t dt))
 {
-    dnf_info("Starting the DNF engine loop");
+    DNF_INFO("Starting the DNF engine loop");
     while (!WindowShouldClose())
     {
         float32_t dt = GetFrameTime();
@@ -54,13 +54,14 @@ void core_engine_loop(void (*update_callback)(float32_t dt))
         update_callback(dt);
         core_renderer_render();
     }
-    dnf_info("DNF engine loop exited!");
+    DNF_INFO("DNF engine loop exited!");
 }
 
 void core_engine_stop(void)
 {
-    dnf_info("Stopping the DNF game engine");
-    dnf_info("Stopping the rendering engine");
+    DNF_INFO("Stopping the DNF game engine");
+    DNF_INFO("Stopping the rendering engine");
     core_renderer_stop();
     CloseWindow();
+    dnf_logger_shutdown();
 }
