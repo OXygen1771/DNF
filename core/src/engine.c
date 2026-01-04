@@ -23,22 +23,12 @@
 #include <raylib.h>
 
 
-/**
- * @brief A structure that represents the current engine state.
- *
- * There should be only one of these.
- */
-typedef struct dnf_engine_state
-{
-    bool8_t is_running;
-    bool8_t is_paused;  //!< Window is out of focus and should not be processed.
-} dnf_engine_state;
-
-static dnf_engine_state engine_state;  // a "singleton" engine state
+static game *dnf_game_instance;  // a "singleton" game instance pointer
+static bool dnf_engine_is_running = false;  // is the engine running
 static bool dnf_engine_initialized = false;  // flag to prevent re-initialization
 
 
-bool8_t engine_init(const dnf_engine_config* config)
+bool8_t engine_init(const dnf_engine_config* config, game *game_instance)
 {
     if (dnf_engine_initialized)
     {
@@ -46,23 +36,37 @@ bool8_t engine_init(const dnf_engine_config* config)
         return false;
     }
 
+    // set global game instance pointer
+    dnf_game_instance = game_instance;
+
     // Initialize engine systems
     if (dnf_logger_init())
         DNF_INFO("Logger initialized");
 
 
     // Initialize window and create OpenGL context
-    InitWindow(config->start_width, config->start_height, config->title);
+    InitWindow(
+        config->start_width,
+        config->start_height,
+        config->title);
     SetTargetFPS(60);  // TODO: add FPS settings
 
     DNF_INFO("Initializing renderer");
-    core_renderer_init();
+    core_renderer_init();  // TODO: use game instance for initializing
     DNF_INFO("Renderer initialized");
     // TODO: initialize input handling system
 
+
     // All subsystems are running
-    engine_state.is_running = true;
-    engine_state.is_paused = false;
+    dnf_engine_is_running = true;
+
+    // Initialize game
+    if (!dnf_game_instance->init(dnf_game_instance))
+    {
+        DNF_FATAL("Failed to initialize the game");
+        return false;
+    }
+    dnf_game_instance->resize(dnf_game_instance, GetScreenWidth(), GetScreenHeight());
 
     // Prevent re-initialization after initializing everything else
     dnf_engine_initialized = true;
@@ -72,12 +76,26 @@ bool8_t engine_init(const dnf_engine_config* config)
 
 bool8_t engine_run(void)
 {
-    while (engine_state.is_running)
+    while (dnf_engine_is_running)
     {
         if (WindowShouldClose())
-            engine_state.is_running = false;
+            dnf_engine_is_running = false;
 
-        core_renderer_render();
+        float32_t dt = GetFrameTime();
+
+        if (!dnf_game_instance->update(dnf_game_instance, dt))
+        {
+            DNF_FATAL("Game update failed! Exiting...");
+            dnf_engine_is_running = false;
+            break;
+        }
+
+        if (!dnf_game_instance->render(dnf_game_instance, dt))
+        {
+            DNF_ERROR("Frame rendering failed! Exiting...");
+            dnf_engine_is_running = false;
+            break;
+        }
     }
 
     // explicitly tell the window to close

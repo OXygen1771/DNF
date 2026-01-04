@@ -14,23 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
 
-#include "defines.h"
-#include "input_system.h"
+#include "game.h"
 
-/**
- * @brief Initializes the game.
- *
- * Creates a player, creates a basic test map.
- *
- * @param input_system_handler Pointer to the input system handler.
- */
-DNF_API void gameplay_init(const DNF_InputSystemHandler *input_system_handler);
+#include "renderer.h"
 
-/**
- * @brief Updates the game state.
- *
- * @param dt Time since last update (frame).
- */
-DNF_API void gameplay_update(float32_t dt);
+
+bool8_t dnf_game_init(game *game_instance)
+{
+    return true;
+}
+
+bool8_t dnf_game_update(game *game_instance, float32_t dt)
+{
+    return true;
+}
+
+bool8_t dnf_game_render(game *game_instance, float32_t dt)
+{
+    core_renderer_render();
+    return true;
+}
+
+void dnf_game_resize(game *game_instance, uint32_t new_width, uint32_t new_height)
+{  }

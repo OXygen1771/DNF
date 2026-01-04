@@ -53,4 +53,4 @@ void core_renderer_draw_pixel(uint32_t x, uint32_t y, Color color);
 /**
  * @brief Draws the game scene.
  */
-void core_renderer_render(void);
+DNF_API void core_renderer_render(void);

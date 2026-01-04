@@ -15,16 +15,19 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+#pragma once
+
 #include "engine.h"
+#include "logger.h"
 
-int main(void)
-{
-    const dnf_engine_config config = {
-        .start_width = 960,
-        .start_height = 540,
-        .title = "DNF 0.1.0 Test"
-    };
-
-    engine_init(&config);
-    engine_run();
-}
+/**
+ * @brief Game creation function.
+ *
+ * Fills out the engine config and game instance to use in the engine creation
+ * and loop.
+ *
+ * @param out_config Resulting engine config.
+ * @param out_game_instance Resulting game interface.
+ * @return True if game creation was successful, false otherwise.
+ */
+bool8_t game_create(dnf_engine_config *out_config, game *out_game_instance);

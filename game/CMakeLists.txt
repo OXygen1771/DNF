@@ -14,26 +14,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# hot-loadable (in the future) game code
+add_library(game SHARED)
 
-add_library(gameplay SHARED)
-
-target_sources(gameplay
+target_sources(game
         PRIVATE
-            src/gameplay.c
+            src/game.c
 
         PUBLIC
             FILE_SET HEADERS
             FILES
-                include/gameplay.h
+                include/game.h
 )
 
-target_include_directories(gameplay
-        PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-            $<INSTALL_INTERFACE:include>
-)
+include_directories(./include)
 
-target_link_libraries(gameplay
+target_link_libraries(game
         PRIVATE
+            core
+)
+
+
+# simple game launch .exe
+add_executable(${PROJECT_NAME})
+
+target_sources(${PROJECT_NAME}
+        PRIVATE
+            src/entrypoint.c
+
+        PRIVATE
+            FILE_SET HEADERS
+            FILES
+                include/entrypoint.h
+)
+
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            game
             core
 )

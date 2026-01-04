@@ -14,28 +14,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(core STATIC)
 
-# add all sources
+add_library(core SHARED)
+
 target_sources(core
         PRIVATE
             src/engine.c
-            src/renderer.c
             src/input_system.c
             src/logger.c
+            src/renderer.c
 
         PUBLIC
             FILE_SET HEADERS
             FILES
                 include/defines.h
+                include/dnf_assertions.h
                 include/engine.h
-                include/renderer.h
                 include/input_system.h
                 include/logger.h
-                include/dnf_assertions.h
+                include/renderer.h
 )
 
-# specify includes for the core module
 target_include_directories(core
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -44,5 +43,5 @@ target_include_directories(core
 
 target_link_libraries(core
         PUBLIC
-            raylib  # from root CMakeLists.txt
+            raylib
 )
