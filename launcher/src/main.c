@@ -16,12 +16,15 @@
 
 
 #include "engine.h"
-#include "gameplay.h"
-
 
 int main(void)
 {
-    core_engine_init("DNF 0.1.0", 960, 540, gameplay_init);
-    core_engine_loop(gameplay_update);
-    core_engine_stop();
+    const dnf_engine_config config = {
+        .start_width = 960,
+        .start_height = 540,
+        .title = "DNF 0.1.0 Test"
+    };
+
+    engine_init(&config);
+    engine_run();
 }

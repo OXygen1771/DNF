@@ -44,6 +44,8 @@ typedef enum dnf_log_level
  * @brief Initializes the logging system.
  *
  * Creates a ./logs directory if it doesn't exist.
+ *
+ * @return True if the logging directory was created successfully.
  */
 bool8_t dnf_logger_init(void);
 

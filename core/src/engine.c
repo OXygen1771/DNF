@@ -16,52 +16,76 @@
 
 
 #include "engine.h"
+
 #include "renderer.h"
-#include "input_system.h"
 #include "logger.h"
 
+#include <raylib.h>
 
-// Global input system handler (initialized in the engine's init function)
-static DNF_InputSystemHandler g_InputSystemHandler;
 
-void core_engine_init(const char *title, const int32_t width, const int32_t height, void (*init_callback)(const DNF_InputSystemHandler *))
+/**
+ * @brief A structure that represents the current engine state.
+ *
+ * There should be only one of these.
+ */
+typedef struct dnf_engine_state
 {
-    dnf_logger_init();
-    DNF_INFO("Starting the DNF engine");
+    bool8_t is_running;
+    bool8_t is_paused;  //!< Window is out of focus and should not be processed.
+} dnf_engine_state;
 
-    DNF_INFO("Initializing window %s (%dx%d)", title, width, height);
-    InitWindow(width, height, title);
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
-    SetTargetFPS(60);  // TODO: add FPS setting?
+static dnf_engine_state engine_state;  // a "singleton" engine state
+static bool dnf_engine_initialized = false;  // flag to prevent re-initialization
 
-    DNF_INFO("Initializing the rendering engine");
+
+bool8_t engine_init(const dnf_engine_config* config)
+{
+    if (dnf_engine_initialized)
+    {
+        DNF_ERROR("Tried to initialize engine more than once!");
+        return false;
+    }
+
+    // Initialize engine systems
+    if (dnf_logger_init())
+        DNF_INFO("Logger initialized");
+
+
+    // Initialize window and create OpenGL context
+    InitWindow(config->start_width, config->start_height, config->title);
+    SetTargetFPS(60);  // TODO: add FPS settings
+
+    DNF_INFO("Initializing renderer");
     core_renderer_init();
-    DNF_INFO("Initializing the input system");
-    core_input_system_init(&g_InputSystemHandler);
+    DNF_INFO("Renderer initialized");
+    // TODO: initialize input handling system
 
-    DNF_INFO("Initializing the gameplay module");
-    init_callback(&g_InputSystemHandler);
+    // All subsystems are running
+    engine_state.is_running = true;
+    engine_state.is_paused = false;
+
+    // Prevent re-initialization after initializing everything else
+    dnf_engine_initialized = true;
+
+    return true;
 }
 
-void core_engine_loop(void (*update_callback)(float32_t dt))
+bool8_t engine_run(void)
 {
-    DNF_INFO("Starting the DNF engine loop");
-    while (!WindowShouldClose())
+    while (engine_state.is_running)
     {
-        float32_t dt = GetFrameTime();
+        if (WindowShouldClose())
+            engine_state.is_running = false;
 
-        core_input_update(&g_InputSystemHandler);
-        update_callback(dt);
         core_renderer_render();
     }
-    DNF_INFO("DNF engine loop exited!");
-}
 
-void core_engine_stop(void)
-{
-    DNF_INFO("Stopping the DNF game engine");
-    DNF_INFO("Stopping the rendering engine");
-    core_renderer_stop();
+    // explicitly tell the window to close
     CloseWindow();
+
+    // Shutdown all systems
     dnf_logger_shutdown();
+    core_renderer_stop();
+
+    return true;
 }

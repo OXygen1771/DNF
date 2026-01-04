@@ -17,28 +17,29 @@
 #pragma once
 
 #include "defines.h"
-#include "input_system.h"
 
 /**
- * @brief Initializes the game engine.
- *
- * Initializes engine systems, creates a game window, a renderer.
- *
- * @param  title   Game window title
- * @param  width   Game window width
- * @param height   Game window height
- * @param init_callback Game init callback
+ * @brief A structure that describes the engine configuration.
  */
-void core_engine_init(const char *title, int32_t width, int32_t height, void (*init_callback)(const DNF_InputSystemHandler *));
+typedef struct dnf_engine_config
+{
+    int32_t start_width;   //!< Initial window width.
+    int32_t start_height;  //!< Initial window height.
+    char *title;           //!< Window title.
+} dnf_engine_config;
+
 
 /**
- * @brief Runs the core engine loop.
+ * @brief Creates a window and initializes the engine loop.
  *
- * @param update_callback Game update callback
+ * @param config Pointer to initial engine config.
+ * @return True if started successfully, false otherwise.
  */
-void core_engine_loop(void (*update_callback)(float32_t dt));
+DNF_API bool8_t engine_init(const dnf_engine_config *config);
 
 /**
- * @brief Stops the engine loop.
+ * @brief Runs the engine loop.
+ *
+ * @return True if exited out of the loop successfully, false otherwise.
  */
-void core_engine_stop(void);
+DNF_API bool8_t engine_run(void);
