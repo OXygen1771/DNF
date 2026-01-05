@@ -28,6 +28,7 @@ static float32_t x = 90, y = 90;
 static float32_t speed = 200;
 
 static const renderer_context *render_ctx;
+static dnf_renderer_api renderer;
 
 void clear_framebuffer(const dnf_framebuffer *fb, Color color)
 {
@@ -39,6 +40,7 @@ bool8_t dnf_game_init(game *game_instance)
     input = game_instance->input_handler;
 
     render_ctx = game_instance->renderer_context;
+    renderer = game_instance->renderer_api;
 
     return true;
 }
@@ -73,6 +75,8 @@ bool8_t dnf_game_render(game *game_instance, float32_t dt)
     renderer_begin_frame(render_ctx);
 
     // UI Logic
+    renderer.draw_text("DNF TEST", 10, 10, 24, GREEN);
+    renderer.draw_fps(10, 40);
 
     renderer_end_frame(render_ctx);
 

@@ -118,8 +118,11 @@ typedef struct game
     // Current input handler.
     dnf_input_system_handler *input_handler;
 
-    // Current renderer context
+    // Current renderer context.
     renderer_context *renderer_context;
+
+    // Rendering API (for calling raylib functions)
+    dnf_renderer_api renderer_api;
 
     /**
      * @brief Function pointer to game's initialization function.

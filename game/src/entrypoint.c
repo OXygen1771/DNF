@@ -56,6 +56,7 @@ int main(void)
     game_instance.engine_config = &engine_config;
     game_instance.input_handler = &input_handler;
     game_instance.renderer_context = &render_ctx;
+    game_instance.renderer_api = renderer_get_api();
 
     // Initialize game interface
     if (!game_create(&game_instance))

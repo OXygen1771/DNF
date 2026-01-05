@@ -33,6 +33,33 @@ typedef struct dnf_framebuffer
 } dnf_framebuffer;
 
 /**
+ * @brief A structure that represents the rendering engine API.
+ *
+ * It provides function pointers to rendering functions that should be
+ * independent of an app (i.e. game or editor).
+ *
+ * It also helps with the fact that a game is basically a shared library, and it
+ * can't call raylib and render to the same OpenGL context that the engine
+ * renders to.
+ */
+typedef struct dnf_renderer_api
+{
+    /**
+     * @brief Render text (wrapper for raylib's DrawText())
+     */
+    void (*draw_text)(
+        const char *text,
+        int32_t x,int32_t y,
+        int32_t size,
+        Color color);
+
+    /**
+     * @brief A special variant of DrawText() which draws current FPS.
+     */
+    void (*draw_fps)(int32_t x, int32_t y);
+} dnf_renderer_api;
+
+/**
  * @brief A structure that represents a rendering context.
  */
 typedef struct renderer_context
@@ -74,6 +101,13 @@ DNF_API void renderer_resize_window(
  */
 void renderer_shutdown(renderer_context *ctx);
 
+
+/**
+ * @brief Creates a rendering api to wrap raylib draw functions.
+ *
+ * @return Rendering API.
+ */
+DNF_API dnf_renderer_api renderer_get_api(void);
 
 /**
  * @brief Begins rendering a frame of a given context.

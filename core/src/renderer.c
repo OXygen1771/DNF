@@ -89,6 +89,24 @@ void renderer_shutdown(renderer_context *ctx)
 }
 
 
+/**
+ * @brief A wrapper for raylib's DrawText()
+ */
+static void draw_text(
+    const char *text,
+    const int32_t x, const int32_t y,
+    const int32_t size, const Color color)
+{ DrawText(text, x, y, size, color); }
+
+
+dnf_renderer_api renderer_get_api(void)
+{
+    return (dnf_renderer_api){
+        .draw_text = draw_text,
+        .draw_fps = DrawFPS
+    };
+}
+
 void renderer_begin_frame(const renderer_context *ctx)
 {
     // update texture with our framebuffer
