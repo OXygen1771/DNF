@@ -17,18 +17,19 @@
 
 #include "engine.h"
 
-#include "renderer.h"
+#include "input_system.h"
 #include "logger.h"
+#include "renderer.h"
 
 #include <raylib.h>
 
 
 static game *dnf_game_instance;  // a "singleton" game instance pointer
-static bool dnf_engine_is_running = false;  // is the engine running
-static bool dnf_engine_initialized = false;  // flag to prevent re-initialization
+static bool8_t dnf_engine_is_running = false;  // is the engine running
+static bool8_t dnf_engine_initialized = false;  // flag to prevent re-initialization
 
 
-bool8_t engine_init(const dnf_engine_config* config, game *game_instance)
+bool8_t engine_init(game *game_instance)
 {
     if (dnf_engine_initialized)
     {
@@ -46,15 +47,18 @@ bool8_t engine_init(const dnf_engine_config* config, game *game_instance)
 
     // Initialize window and create OpenGL context
     InitWindow(
-        config->start_width,
-        config->start_height,
-        config->title);
+        game_instance->engine_config->start_width,
+        game_instance->engine_config->start_height,
+        game_instance->engine_config->title);
     SetTargetFPS(60);  // TODO: add FPS settings
 
     DNF_INFO("Initializing renderer");
     core_renderer_init();  // TODO: use game instance for initializing
     DNF_INFO("Renderer initialized");
-    // TODO: initialize input handling system
+
+    DNF_INFO("Initializing input system");
+    if (input_handler_init(game_instance->input_handler))
+        DNF_INFO("Input system initialized");
 
 
     // All subsystems are running

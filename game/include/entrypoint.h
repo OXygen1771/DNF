@@ -26,8 +26,7 @@
  * Fills out the engine config and game instance to use in the engine creation
  * and loop.
  *
- * @param out_config Resulting engine config.
  * @param out_game_instance Resulting game interface.
  * @return True if game creation was successful, false otherwise.
  */
-bool8_t game_create(dnf_engine_config *out_config, game *out_game_instance);
+bool8_t game_create(game *out_game_instance);

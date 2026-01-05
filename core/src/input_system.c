@@ -16,85 +16,106 @@
 
 
 #include "input_system.h"
+#include "logger.h"
+
+#include <raylib.h>
 
 
-void core_input_system_init(DNF_InputSystemHandler* handler)
+// A LUT map from game actions to bindings.
+static dnf_input_binding actions[DNF_GAME_ACTION_COUNT];
+
+static dnf_input_system_handler *input_handler;  // a "singleton" handler
+static bool8_t dnf_input_system_initialized = false;  // flag to prevent re-initialization
+
+
+bool8_t binding_is_pressed(const dnf_input_binding binding)
 {
-    // default keybinds
-    handler->keybind_LUT[DNF_GAME_ACTION_MOVE_FORWARD] = KEY_W;
-    handler->keybind_LUT[DNF_GAME_ACTION_MOVE_BACKWARD] = KEY_S;
-    handler->keybind_LUT[DNF_GAME_ACTION_MOVE_LEFT] = KEY_A;
-    handler->keybind_LUT[DNF_GAME_ACTION_MOVE_RIGHT] = KEY_D;
-
-    handler->keybind_LUT[DNF_GAME_ACTION_INTERACT] = KEY_E;
-
-    handler->keybind_LUT[DNF_GAME_ACTION_ATTACK1] = MOUSE_BUTTON_LEFT;
-    handler->keybind_LUT[DNF_GAME_ACTION_ATTACK2] = MOUSE_BUTTON_RIGHT;
-
-    for (uint32_t i = 0; i < DNF_GAME_ACTION_COUNT; i++)
-        handler->action_states[i] = DNF_INPUT_STATE_IDLE;
-
-    handler->mouse_pos = GetMousePosition();
-    handler->mouse_pos_delta = (Vector2){0.0f, 0.0f};
-    handler->mouse_wheel_delta = (Vector2){0.0f, 0.0f};
+    switch (binding.input_type)
+    {
+    case DNF_INPUT_TYPE_KEYBOARD:
+        return IsKeyPressed(binding.raylib_code);
+    case DNF_INPUT_TYPE_MOUSE:
+        return IsMouseButtonPressed(binding.raylib_code);
+    default:
+        return false;
+    }
 }
 
-void core_input_update(DNF_InputSystemHandler *handler)
+bool8_t binding_is_held(const dnf_input_binding binding)
 {
-    // iterating from 1 because ACTION_NONE is bound to 0 = IDLE
-    for (int i = 1; i < DNF_GAME_ACTION_COUNT; i++)
+    switch (binding.input_type)
     {
-        // get the current key state
-        bool current_down = false;
-        // TODO: this WILL NOT support binding attack actions to the keyboard
-        if (i <= DNF_GAME_ACTION_INTERACT)
-            current_down = IsKeyDown(handler->keybind_LUT[i]);
-        else if (i >= DNF_GAME_ACTION_ATTACK1 && i <= DNF_GAME_ACTION_ATTACK2)
-            current_down = IsMouseButtonDown(handler->keybind_LUT[i]);
+        case DNF_INPUT_TYPE_KEYBOARD:
+            return IsKeyDown(binding.raylib_code);
+        case DNF_INPUT_TYPE_MOUSE:
+            return IsMouseButtonDown(binding.raylib_code);
+        default:
+            return false;
+    }
+}
 
-        // update action state according to the current key state
-        if (current_down)
-        {
-            // was IDLE or RELEASED, now it is PRESSED again
-            if (handler->action_states[i] <= DNF_INPUT_STATE_RELEASED)
-                handler->action_states[i] = DNF_INPUT_STATE_PRESSED;
-            // was PRESSED OR HELD, now it is HELD
-            else
-                handler->action_states[i] = DNF_INPUT_STATE_HELD;
-        }
-        else
-        {
-            // was PRESSED or HELD, now it is RELEASED
-            if (handler->action_states[i] >= DNF_INPUT_STATE_PRESSED)
-                handler->action_states[i] = DNF_INPUT_STATE_RELEASED;
-            // was RELEASED, now it is IDLE
-            else
-                handler->action_states[i] = DNF_INPUT_STATE_IDLE;
-        }
+bool8_t binding_is_released(const dnf_input_binding binding)
+{
+    switch (binding.input_type)
+    {
+        case DNF_INPUT_TYPE_KEYBOARD:
+            return IsKeyReleased(binding.raylib_code);
+        case DNF_INPUT_TYPE_MOUSE:
+            return IsMouseButtonReleased(binding.raylib_code);
+        default:
+            return false;
+    }
+}
+
+
+bool8_t is_pressed(const dnf_game_action action)
+{
+    return binding_is_pressed(actions[action]);
+}
+
+bool8_t is_held(const dnf_game_action action)
+{
+    return binding_is_held(actions[action]);
+}
+
+bool8_t is_released(const dnf_game_action action)
+{
+    return binding_is_released(actions[action]);
+}
+
+bool8_t input_handler_init(dnf_input_system_handler* handler)
+{
+    if (dnf_input_system_initialized)
+    {
+        DNF_ERROR("Tried to initialize input system more than once!");
+        return false;
     }
 
-    // update mouse pointer info
-    handler->mouse_pos = GetMousePosition();
-    handler->mouse_pos_delta = GetMouseDelta();
-    handler->mouse_wheel_delta = GetMouseWheelMoveV();
+    // set global handler pointer
+    input_handler = handler;
+
+    // set handler function pointers
+    input_handler->is_pressed = is_pressed;
+    input_handler->is_held = is_held;
+    input_handler->is_released = is_released;
+
+    // set default keybinds
+    // TODO: add config and change it in entrypoints, not here
+    actions[DNF_GAME_ACTION_MOVE_FORWARD] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_W};
+    actions[DNF_GAME_ACTION_MOVE_BACKWARD] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_S};
+    actions[DNF_GAME_ACTION_MOVE_LEFT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_A};
+    actions[DNF_GAME_ACTION_MOVE_RIGHT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_D};
+
+    actions[DNF_GAME_ACTION_INTERACT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_E};
+
+    actions[DNF_GAME_ACTION_ATTACK1] = (dnf_input_binding){DNF_INPUT_TYPE_MOUSE, MOUSE_BUTTON_LEFT};
+    actions[DNF_GAME_ACTION_ATTACK2] = (dnf_input_binding){DNF_INPUT_TYPE_MOUSE, MOUSE_BUTTON_RIGHT};
+
+    actions[DNF_GAME_ACTION_MENU] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_ESCAPE};
+
+    return true;
 }
 
-DNF_InputState core_input_get_current_state(const DNF_InputSystemHandler *handler, const DNF_GameAction action)
+void input_handler_shutdown()
 {
-    return handler->action_states[action];
-}
-
-bool core_input_action_is_pressed(const DNF_InputSystemHandler *handler, const DNF_GameAction action)
-{
-    return core_input_get_current_state(handler, action) == DNF_INPUT_STATE_PRESSED;
-}
-
-bool core_input_action_is_held(const DNF_InputSystemHandler *handler, const DNF_GameAction action)
-{
-    return core_input_get_current_state(handler, action) == DNF_INPUT_STATE_HELD;
-}
-
-bool core_input_action_is_released(const DNF_InputSystemHandler *handler, const DNF_GameAction action)
-{
-    return core_input_get_current_state(handler, action) == DNF_INPUT_STATE_RELEASED;
 }

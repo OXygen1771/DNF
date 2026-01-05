@@ -18,7 +18,7 @@
 #pragma once
 
 #include "defines.h"
-#include "engine.h"
+#include "dnf_gametypes.h"
 
 typedef struct dnf_game_state
 {

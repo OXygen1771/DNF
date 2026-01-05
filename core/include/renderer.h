@@ -48,7 +48,7 @@ void core_renderer_stop(void);
  * @param y Y coord (top to bottom)
  * @param color raylib Color
  */
-void core_renderer_draw_pixel(uint32_t x, uint32_t y, Color color);
+DNF_API void core_renderer_draw_pixel(uint32_t x, uint32_t y, Color color);
 
 /**
  * @brief Draws the game scene.

@@ -21,12 +21,12 @@
 #include <stdlib.h>
 
 
-bool8_t game_create(dnf_engine_config *out_config, game *out_game_instance)
+bool8_t game_create(game *out_game_instance)
 {
     // configure the engine window
-    out_config->start_width = 960;
-    out_config->start_height = 540;
-    out_config->title = "DNF 0.1.0 | TEST";
+    out_game_instance->engine_config->start_width = 960;
+    out_game_instance->engine_config->start_height = 540;
+    out_game_instance->engine_config->title = "DNF 0.1.0 | TEST";
 
     // configure the game instance
     out_game_instance->init = dnf_game_init;
@@ -49,17 +49,21 @@ bool8_t game_create(dnf_engine_config *out_config, game *out_game_instance)
 int main(void)
 {
     dnf_engine_config engine_config;
+    dnf_input_system_handler input_handler;
     game game_instance;
 
+    game_instance.engine_config = &engine_config;
+    game_instance.input_handler = &input_handler;
+
     // Initialize game interface
-    if (!game_create(&engine_config, &game_instance))
+    if (!game_create(&game_instance))
     {
         DNF_FATAL("Could not initialize game!");
         return -1;
     }
 
     // Initialize engine
-    if (!engine_init(&engine_config, &game_instance))
+    if (!engine_init(&game_instance))
     {
         DNF_FATAL("Could not initialize engine!");
         return 1;

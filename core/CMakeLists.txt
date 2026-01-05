@@ -29,6 +29,7 @@ target_sources(core
             FILES
                 include/defines.h
                 include/dnf_assertions.h
+                include/dnf_gametypes.h
                 include/engine.h
                 include/input_system.h
                 include/logger.h
