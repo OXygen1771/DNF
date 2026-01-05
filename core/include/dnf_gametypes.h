@@ -17,6 +17,7 @@
 #pragma once
 
 #include "defines.h"
+#include "renderer.h"
 
 /**
  * @brief An enum that represents all possible player actions.
@@ -117,6 +118,9 @@ typedef struct game
     // Current input handler.
     dnf_input_system_handler *input_handler;
 
+    // Current renderer context
+    renderer_context *renderer_context;
+
     /**
      * @brief Function pointer to game's initialization function.
      *
@@ -150,7 +154,7 @@ typedef struct game
      * @param width New window width.
      * @param height New window height.
      */
-    void (*resize)(struct game *game_instance, uint32_t width, uint32_t height);
+    void (*resize)(struct game *game_instance, int32_t width, int32_t height);
 
     // Game state.
     void *game_state;

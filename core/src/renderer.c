@@ -16,61 +16,109 @@
 
 
 #include "renderer.h"
-#include "raylib.h"
 
-// Global pixel array.
-static Color pixels[WIDTH * HEIGHT];
-// Main texture that we will draw to directly.
-static Texture2D fb_texture;
+#include "logger.h"
 
-void core_renderer_init(void)
+#include <raylib.h>
+#include <raymath.h>
+
+#include <stdlib.h>
+
+
+bool8_t renderer_init(
+    renderer_context *ctx,
+    const int32_t out_width,
+    const int32_t out_height)
 {
-    const Image fb_image = {
-        .data = pixels,
-        .width = WIDTH,
-        .height = HEIGHT,
+    // TODO: make the logic more robust and raise errors if something is wrong
+    ctx->framebuffer.width = out_width;
+    ctx->framebuffer.height = out_height;
+    ctx->framebuffer.pixels = GenImageColor(out_width, out_height, BLACK).data;
+
+    // initialize target Texture2D
+    const Image target_image = {
+        .data = ctx->framebuffer.pixels,
+        .width = out_width,
+        .height = out_height,
         .mipmaps = 1,
         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
     };
-    fb_texture = LoadTextureFromImage(fb_image);
-    SetTextureFilter(fb_texture, TEXTURE_FILTER_POINT);  // disable interpolation
+    ctx->target = LoadTextureFromImage(target_image);
+    SetTextureFilter(ctx->target, TEXTURE_FILTER_POINT);  // no interpolation
+    DNF_DEBUG("Initialized rendering context");
+
+    DNF_INFO(
+        "Initialized a new rendering context: "
+        "target resolution %dx%d, ",
+        out_width, out_height);
+
+    return true;
 }
 
-void core_renderer_stop(void)
+void renderer_resize_window(
+    renderer_context *ctx,
+    const int32_t window_width,
+    const int32_t window_height)
 {
-    UnloadTexture(fb_texture);
+    // scale factor - get it from either of the ratios
+    const float32_t scale = fminf(
+        (float32_t)window_width / (float32_t)ctx->target.width,
+        (float32_t)window_height / (float32_t)ctx->target.height);
+
+    // we could just do ctx->screen_rect.width = window_width
+    ctx->screen_rect.width = (float32_t)ctx->target.width * scale;
+    ctx->screen_rect.height = (float32_t)ctx->target.height * scale;
+
+    // update screen rectangle top-left corner position
+    ctx->screen_rect.x = ((float32_t)window_width - ctx->screen_rect.width) / 2;
+    ctx->screen_rect.y = ((float32_t)window_height - ctx->screen_rect.height) / 2;
 }
 
-void core_renderer_draw_pixel(uint32_t x, uint32_t y, const Color color)
+void renderer_shutdown(renderer_context *ctx)
 {
-    pixels[y * WIDTH + x] = color;
+    if (ctx)
+    {
+        DNF_INFO(
+            "Shutting down a rendering context: "
+            "target %dx%d, screen %dx%d",
+            ctx->target.width, ctx->target.height,
+            ctx->screen_rect.width, ctx->screen_rect.height);
+        UnloadTexture(ctx->target);
+        DNF_INFO("Renderer shut down successfully");
+    }
 }
 
-void core_renderer_render(void)
+
+void renderer_begin_frame(const renderer_context *ctx)
 {
-    const float screen_width = (float)GetScreenWidth();
-    const float screen_height = (float)GetScreenHeight();
+    // update texture with our framebuffer
+    UpdateTexture(ctx->target, ctx->framebuffer.pixels);
 
-    // get the smaller of ratios
-    const float scale = (screen_width / (float)WIDTH) < (screen_height / (float)HEIGHT) ? (screen_width / (float)WIDTH) : (screen_height / (float)HEIGHT);
-
-    const Vector2 position = {
-        (screen_width - WIDTH * scale) / 2,
-        (screen_height - HEIGHT * scale) / 2,
-    };
-
-    core_renderer_draw_pixel(50, 50, WHITE);
-
-    UpdateTexture(fb_texture, pixels);
     BeginDrawing();
-        ClearBackground(BLACK);
-        DrawTextureEx(
-            fb_texture,
-            position,
+    ClearBackground(BLACK);
+
+    // scale the render to the screen rect
+    DrawTexturePro(
+        // Texture to render
+        ctx->target,
+        // Source rectangle
+        (Rectangle){
             0.0f,
-            scale,
-            WHITE
-            );
-        DrawFPS(10, 10);
+            0.0f,
+            (float32_t)ctx->framebuffer.width,
+            (float32_t)ctx->framebuffer.height},
+        // Destination rectangle (to scale to)
+        ctx->screen_rect,
+        // Origin of destination rectangle
+        (Vector2){0.0f, 0.0f},
+        // Rotation of destination rectangle
+        0.0f,
+        // Tint
+        WHITE);
+}
+
+void renderer_end_frame(const renderer_context *ctx)
+{
+    // render the entire screen
     EndDrawing();
 }

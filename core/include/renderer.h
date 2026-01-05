@@ -21,36 +21,70 @@
 
 #include <raylib.h>
 
-#define WIDTH 960    //!< Render texture width.
-#define WIDTH2 480   //!< Half of render texture width.
-#define HEIGHT 540   //!< Render texture height.
-#define HEIGHT2 270  //!< Half of render texture height.
-
 
 /**
- * @brief Initializes the rendering engine.
+ * @brief Basic framebuffer with R8G8B8A8 values
+ */
+typedef struct dnf_framebuffer
+{
+    Color *pixels;  //!< Array of pixels (colors - uint8_t * 4)
+    int32_t width;
+    int32_t height;
+} dnf_framebuffer;
+
+/**
+ * @brief A structure that represents a rendering context.
+ */
+typedef struct renderer_context
+{
+    dnf_framebuffer framebuffer;  //!< Pixel buffer
+    Texture2D target;             //!< Target texture
+    Rectangle screen_rect;        //!< Actual screen size
+} renderer_context;
+
+/**
+ * @brief Initializes the renderer and populates a given context.
  *
- * Creates a Texture2D that will be used to render stuff to.
+ * @param ctx Resulting rendering context.
+ * @param out_width Target image width.
+ * @param out_height Target image height.
+ * @return True if successful, false otherwise.
  */
-void core_renderer_init(void);
+bool8_t renderer_init(
+    renderer_context *ctx,
+    int32_t out_width,
+    int32_t out_height);
 
 /**
- * @brief Stops the rendering engine.
+ * @brief Resizes the renderer window (not the output) in a given context.
  *
- * Unloads the render texture from the GPU.
+ * @param ctx Rendering context to resize.
+ * @param window_width New window width.
+ * @param window_height New window height.
  */
-void core_renderer_stop(void);
+DNF_API void renderer_resize_window(
+    renderer_context *ctx,
+    int32_t window_width,
+    int32_t window_height);
 
 /**
- * @brief Draws a pixel at given coordinates with a given color.
+ * @brief Shuts down the renderer of a given context.
  *
- * @param x X coord (left to right)
- * @param y Y coord (top to bottom)
- * @param color raylib Color
+ * @param ctx Rendering context to stop.
  */
-DNF_API void core_renderer_draw_pixel(uint32_t x, uint32_t y, Color color);
+void renderer_shutdown(renderer_context *ctx);
+
 
 /**
- * @brief Draws the game scene.
+ * @brief Begins rendering a frame of a given context.
+ *
+ * @param ctx Rendering context to render.
  */
-DNF_API void core_renderer_render(void);
+DNF_API void renderer_begin_frame(const renderer_context *ctx);
+
+/**
+ * @brief Stops rendering a frame of a given context.
+ *
+ * @param ctx
+ */
+DNF_API void renderer_end_frame(const renderer_context *ctx);

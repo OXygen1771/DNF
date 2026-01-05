@@ -50,10 +50,12 @@ int main(void)
 {
     dnf_engine_config engine_config;
     dnf_input_system_handler input_handler;
+    renderer_context render_ctx;
     game game_instance;
 
     game_instance.engine_config = &engine_config;
     game_instance.input_handler = &input_handler;
+    game_instance.renderer_context = &render_ctx;
 
     // Initialize game interface
     if (!game_create(&game_instance))

@@ -31,4 +31,4 @@ DNF_API bool8_t dnf_game_update(game *game_instance, float32_t dt);
 
 DNF_API bool8_t dnf_game_render(game *game_instance, float32_t dt);
 
-DNF_API void dnf_game_resize(game *game_instance, uint32_t new_width, uint32_t new_height);
+DNF_API void dnf_game_resize(game *game_instance, int32_t new_width, int32_t new_height);

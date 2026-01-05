@@ -20,28 +20,31 @@
 #include "logger.h"
 #include "renderer.h"
 
+#include <string.h>
 
-static dnf_input_system_handler *input;
-static int32_t x, y = 120;
+static const dnf_input_system_handler *input;
 
-static float32_t speed = 64;
+static float32_t x = 90, y = 90;
+static float32_t speed = 200;
 
-static bool8_t pressed = false;
+static const renderer_context *render_ctx;
+
+void clear_framebuffer(const dnf_framebuffer *fb, Color color)
+{
+    memset(fb->pixels, 0x000f, fb->width * fb->height * sizeof(Color));
+}
 
 bool8_t dnf_game_init(game *game_instance)
 {
     input = game_instance->input_handler;
+
+    render_ctx = game_instance->renderer_context;
 
     return true;
 }
 
 bool8_t dnf_game_update(game *game_instance, float32_t dt)
 {
-    if (input->is_pressed(DNF_GAME_ACTION_ATTACK1))
-        pressed = true;
-    else
-        pressed = false;
-
     if (input->is_held(DNF_GAME_ACTION_MOVE_FORWARD))
         y = y - speed * dt;
     if (input->is_held(DNF_GAME_ACTION_MOVE_BACKWARD))
@@ -56,15 +59,28 @@ bool8_t dnf_game_update(game *game_instance, float32_t dt)
 
 bool8_t dnf_game_render(game *game_instance, float32_t dt)
 {
-    for (int32_t i = x - 4; i < x + 4; i++)
-        for (int32_t j = y - 4; j < y + 4; j++)
-            core_renderer_draw_pixel(
-                i + x, j + y,
-                pressed ? RED : WHITE);
+    // we will draw directly to the framebuffer
+    const dnf_framebuffer *fb = &(render_ctx->framebuffer);
+    clear_framebuffer(fb, BLACK);
 
-    core_renderer_render();
+    const int32_t ix = x;
+    // game drawing logic
+    const int32_t iy = y;
+    const int32_t i = ix < 0 ? 0 : ix > fb->width ? fb->width : ix;
+    const int32_t j = iy < 0 ? 0 : iy > fb->height ? fb->height : iy;
+    fb->pixels[j * fb->width + i] = RED;
+
+    renderer_begin_frame(render_ctx);
+
+    // UI Logic
+
+    renderer_end_frame(render_ctx);
+
+
     return true;
 }
 
-void dnf_game_resize(game *game_instance, uint32_t new_width, uint32_t new_height)
-{  }
+void dnf_game_resize(game *game_instance, int32_t new_width, int32_t new_height)
+{
+    renderer_resize_window(game_instance->renderer_context, new_width, new_height);
+}

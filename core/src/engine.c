@@ -53,8 +53,12 @@ bool8_t engine_init(game *game_instance)
     SetTargetFPS(60);  // TODO: add FPS settings
 
     DNF_INFO("Initializing renderer");
-    core_renderer_init();  // TODO: use game instance for initializing
-    DNF_INFO("Renderer initialized");
+    if (renderer_init(
+        game_instance->renderer_context,
+        game_instance->engine_config->start_width,
+        game_instance->engine_config->start_height))
+        DNF_INFO("Renderer initialized");
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     DNF_INFO("Initializing input system");
     if (input_handler_init(game_instance->input_handler))
@@ -85,6 +89,12 @@ bool8_t engine_run(void)
         if (WindowShouldClose())
             dnf_engine_is_running = false;
 
+        if (IsWindowResized())
+            dnf_game_instance->resize(
+                dnf_game_instance,
+                GetScreenWidth(),
+                GetScreenHeight());
+
         float32_t dt = GetFrameTime();
 
         if (!dnf_game_instance->update(dnf_game_instance, dt))
@@ -102,12 +112,13 @@ bool8_t engine_run(void)
         }
     }
 
+
+    // Shutdown all systems
+    renderer_shutdown(dnf_game_instance->renderer_context);
     // explicitly tell the window to close
     CloseWindow();
 
-    // Shutdown all systems
     dnf_logger_shutdown();
-    core_renderer_stop();
 
     return true;
 }
