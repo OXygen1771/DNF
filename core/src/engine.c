@@ -74,7 +74,9 @@ bool8_t engine_init(game *game_instance)
         DNF_FATAL("Failed to initialize the game");
         return false;
     }
-    dnf_game_instance->resize(dnf_game_instance, GetScreenWidth(), GetScreenHeight());
+    renderer_resize_window(
+        dnf_game_instance->renderer_context,
+        GetScreenWidth(), GetScreenHeight());
 
     // Prevent re-initialization after initializing everything else
     dnf_engine_initialized = true;
@@ -90,10 +92,9 @@ bool8_t engine_run(void)
             dnf_engine_is_running = false;
 
         if (IsWindowResized())
-            dnf_game_instance->resize(
-                dnf_game_instance,
-                GetScreenWidth(),
-                GetScreenHeight());
+            renderer_resize_window(
+                dnf_game_instance->renderer_context,
+                GetScreenWidth(), GetScreenHeight());
 
         float32_t dt = GetFrameTime();
 

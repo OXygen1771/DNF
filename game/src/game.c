@@ -83,8 +83,3 @@ bool8_t dnf_game_render(game *game_instance, float32_t dt)
 
     return true;
 }
-
-void dnf_game_resize(game *game_instance, int32_t new_width, int32_t new_height)
-{
-    renderer_resize_window(game_instance->renderer_context, new_width, new_height);
-}

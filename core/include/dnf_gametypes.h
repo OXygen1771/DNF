@@ -150,15 +150,6 @@ typedef struct game
      */
     bool8_t (*render)(struct game *game_instance, float32_t dt);
 
-    /**
-     * @brief Function pointer to resize the game window.
-     *
-     * @param game_instance Game instance info.
-     * @param width New window width.
-     * @param height New window height.
-     */
-    void (*resize)(struct game *game_instance, int32_t width, int32_t height);
-
     // Game state.
     void *game_state;
 } game;

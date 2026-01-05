@@ -89,7 +89,7 @@ bool8_t renderer_init(
  * @param window_width New window width.
  * @param window_height New window height.
  */
-DNF_API void renderer_resize_window(
+void renderer_resize_window(
     renderer_context *ctx,
     int32_t window_width,
     int32_t window_height);

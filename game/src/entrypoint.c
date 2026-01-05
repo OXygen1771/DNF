@@ -32,7 +32,6 @@ bool8_t game_create(game *out_game_instance)
     out_game_instance->init = dnf_game_init;
     out_game_instance->update = dnf_game_update;
     out_game_instance->render = dnf_game_render;
-    out_game_instance->resize = dnf_game_resize;
 
     // configure the game state
     out_game_instance->game_state = malloc(sizeof(dnf_game_state));
