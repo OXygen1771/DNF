@@ -58,7 +58,7 @@ bool8_t engine_init(game *game_instance)
         game_instance->engine_config->start_width,
         game_instance->engine_config->start_height))
         DNF_INFO("Renderer initialized");
-    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_MAXIMIZED);
 
     DNF_INFO("Initializing input system");
     if (input_handler_init(game_instance->input_handler))

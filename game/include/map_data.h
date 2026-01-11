@@ -17,37 +17,35 @@
 
 #pragma once
 
+
 #include "defines.h"
-#include "dnf_gametypes.h"
 
-#include "map_data.h"
 
-#define TAU 6.28318530717958647692f
-#define PI 3.14159265358979323846f
-#define PI_2 1.57079632679489661923f
-
-/**
- * @brief A structure that represents the player and holds info about them.
- */
-typedef struct player_t
+typedef struct wall_t
 {
-    Vector3 pos;      //!< Position (x, y, z).
-    Vector2 cam_dir;  //!< Camera direction in radians (x is horizontal).
-} player_t;
+    Vector2 start;
+    Vector2 end;
 
-/**
- * @brief A structure that represents the current game state.
- */
-typedef struct dnf_game_state
+    Color color;
+} wall_t;
+
+typedef struct sector_t
 {
-    player_t player;  //!< Player's state.
+    int32_t wall_start;
+    int32_t wall_end;
 
-    map_data_t map;
-} dnf_game_state;
+    float32_t base_level;
+    float32_t height;
 
+    Vector2 center;
 
-DNF_API bool8_t dnf_game_init(game *game_instance);
+    float32_t z_depth;
+} sector_t;
 
-DNF_API bool8_t dnf_game_update(game *game_instance, float32_t dt);
-
-DNF_API bool8_t dnf_game_render(game *game_instance, float32_t dt);
+typedef struct map_data_t
+{
+    uint32_t wall_count;
+    uint32_t sector_count;
+    wall_t *walls;
+    sector_t *sectors;
+} map_data_t;

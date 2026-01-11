@@ -31,6 +31,9 @@ typedef enum dnf_game_action
     DNF_GAME_ACTION_MOVE_LEFT,
     DNF_GAME_ACTION_MOVE_RIGHT,
 
+    DNF_GAME_ACTION_MOVE_UP,
+    DNF_GAME_ACTION_MOVE_DOWN,
+
     // INTERACTIONS
 
     DNF_GAME_ACTION_INTERACT,       //!< Primary interaction (buttons, etc.)

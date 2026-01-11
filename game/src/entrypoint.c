@@ -26,7 +26,7 @@ bool8_t game_create(game *out_game_instance)
     // configure the engine window
     out_game_instance->engine_config->start_width = 960;
     out_game_instance->engine_config->start_height = 540;
-    out_game_instance->engine_config->title = "DNF 0.1.0 | TEST";
+    out_game_instance->engine_config->title = "DNF 0.1.0 | RENDERER TEST";
 
     // configure the game instance
     out_game_instance->init = dnf_game_init;
@@ -77,6 +77,8 @@ int main(void)
         DNF_ERROR("Encountered an error while shutting down the engine.");
         return 2;
     }
+
+    free(game_instance.game_state);
 
     // exited ok!
     return 0;

@@ -20,11 +20,14 @@ add_library(game SHARED)
 target_sources(game
         PRIVATE
             src/game.c
+            src/game_render.c
 
         PUBLIC
             FILE_SET HEADERS
             FILES
                 include/game.h
+                include/game_render.h
+                include/map_data.h
 )
 
 include_directories(./include)

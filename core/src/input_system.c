@@ -106,7 +106,10 @@ bool8_t input_handler_init(dnf_input_system_handler* handler)
     actions[DNF_GAME_ACTION_MOVE_LEFT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_A};
     actions[DNF_GAME_ACTION_MOVE_RIGHT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_D};
 
-    actions[DNF_GAME_ACTION_INTERACT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_E};
+    actions[DNF_GAME_ACTION_MOVE_UP] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_E};
+    actions[DNF_GAME_ACTION_MOVE_DOWN] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_Q};
+
+    actions[DNF_GAME_ACTION_INTERACT] = (dnf_input_binding){DNF_INPUT_TYPE_KEYBOARD, KEY_F};
 
     actions[DNF_GAME_ACTION_ATTACK1] = (dnf_input_binding){DNF_INPUT_TYPE_MOUSE, MOUSE_BUTTON_LEFT};
     actions[DNF_GAME_ACTION_ATTACK2] = (dnf_input_binding){DNF_INPUT_TYPE_MOUSE, MOUSE_BUTTON_RIGHT};

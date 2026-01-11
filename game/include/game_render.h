@@ -20,34 +20,21 @@
 #include "defines.h"
 #include "dnf_gametypes.h"
 
-#include "map_data.h"
+#include "game.h"
 
-#define TAU 6.28318530717958647692f
-#define PI 3.14159265358979323846f
-#define PI_2 1.57079632679489661923f
 
 /**
- * @brief A structure that represents the player and holds info about them.
+ * @brief Initializes the game renderer.
+ * @param game_instance Game instance to initialize the renderer for.
+ * @return True if successful, false otherwise.
  */
-typedef struct player_t
-{
-    Vector3 pos;      //!< Position (x, y, z).
-    Vector2 cam_dir;  //!< Camera direction in radians (x is horizontal).
-} player_t;
+bool8_t init_renderer(const game *game_instance);
 
 /**
- * @brief A structure that represents the current game state.
+ * @brief Draws a game frame, including the UI.
+ *
+ * @param game_state Current game state to render.
+ * @param dt Time in milliseconds since last frame.
+ * @return True if successful, false otherwise.
  */
-typedef struct dnf_game_state
-{
-    player_t player;  //!< Player's state.
-
-    map_data_t map;
-} dnf_game_state;
-
-
-DNF_API bool8_t dnf_game_init(game *game_instance);
-
-DNF_API bool8_t dnf_game_update(game *game_instance, float32_t dt);
-
-DNF_API bool8_t dnf_game_render(game *game_instance, float32_t dt);
+bool8_t draw_game(const dnf_game_state *game_state, float32_t dt);
